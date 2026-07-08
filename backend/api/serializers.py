@@ -1,22 +1,23 @@
 
 from rest_framework import serializers
-from .models import User, Product
+from .models import  Product
+from django.contrib.auth.models import User as auth_user
 # Create your views here.
 
 class UserSerializer(serializers.ModelSerializer):
     
     product = serializers.PrimaryKeyRelatedField(
         many=True, 
-        queryset=User.objects.all()
+        queryset=Product.objects.all()
         )
     class Meta:
-        model = User
+        model = auth_user
         fields = ['uid', 'username', 'email', 'password']
         read_only_fields = ['uid']
 
     def create(self, validated_data):
         
-        return User.objects.create_user(**validated_data)
+        return auth_user.objects.create_user(**validated_data)
     
     def update(self, instance, validated_data):
         instance.username = validated_data.get('username', instance.username)
@@ -33,10 +34,11 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['product_id', 'product_name', 'product_description', 'product_price', 'product_image', 'product_stock', 'user']
-        read_only_fields = ['product_id']
+        read_only_fields = ['product_id', 'user']
 
-    def create(self, validated_data):
+    """   def create(self, validated_data):
         return Product.objects.create(**validated_data)
+    """        
     
     def update(self, instance, validated_data):
         instance.product_name = validated_data.get('product_name', instance.product_name)
