@@ -6,13 +6,10 @@ from django.contrib.auth.models import User as auth_user
 
 class UserSerializer(serializers.ModelSerializer):
     
-    product = serializers.PrimaryKeyRelatedField(
-        many=True, 
-        queryset=Product.objects.all()
-        )
+   
     class Meta:
         model = auth_user
-        fields = ['uid', 'username', 'email', 'password']
+        fields = ['id', 'username', 'email', 'password']
         read_only_fields = ['uid']
 
     def create(self, validated_data):
