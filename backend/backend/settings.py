@@ -40,7 +40,18 @@ INSTALLED_APPS = [
     "api",
     'rest_framework',
     "corsheaders",
+    'rest_framework_simplejwt',
 ]
+
+from datetime import timedelta
+
+#JWT-CONFIGIURATIONS
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
+
 
 MIDDLEWARE = [
     
@@ -132,10 +143,12 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 #methode d'authentification 
+AUTH_USER_MODEL = "api.User"
 
 REST_FRAMEWORK = {
     
     'DEFAULT_AUTHENTICATION_CLASSES': [
+         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ]

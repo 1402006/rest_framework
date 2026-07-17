@@ -3,7 +3,7 @@ from rest_framework import generics , permissions
 from .models import Product
 from .serializers import UserSerializer,ProductSerializer
 from api.permissions import IsOwnerOrReadOnly
-from django.contrib.auth.models import User as auth_user
+from api.models import User as auth_user
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -12,6 +12,13 @@ from rest_framework.response import Response
 class UserListCreateAPIView(generics.ListCreateAPIView):
     queryset = auth_user.objects.all()
     serializer_class = UserSerializer
+    
+    
+    def perform_create(self, serializer):
+        print(self.request.user)
+        print(self.request.user.id)
+        serializer.save(user=self.request.user)
+       
 
 class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     

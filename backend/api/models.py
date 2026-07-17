@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User as auth_user
 from api.tickets_generator import generate_ticket_code
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
 # Create your models here.
     
@@ -12,7 +14,7 @@ class Product(models.Model):
     product_image = models.ImageField(upload_to='product_images/')
     product_stock = models.IntegerField()
     user = models.ForeignKey(
-        auth_user, 
+        settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 
         related_name='products'
         )
@@ -67,7 +69,7 @@ class Ticket(models.Model):
         ASSISTANCE = "DELETED", "deleted"
       
     id_ticket = models.AutoField(primary_key=True)
-    counter = models.ForeignKey(Guichet, on_delete=models.CASCADE)
+    guichet = models.ForeignKey(Guichet, on_delete=models.CASCADE , related_name="ticket")
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     
     ticket_code = models.CharField(
@@ -89,5 +91,29 @@ class Ticket(models.Model):
             )
 
         super().save(*args, **kwargs)
+    
+class Client(models.Model):
+    
+    id_client = models.AutoField(primary_key=True),
+    client_name = models.CharField(max_length = 40),
+    client_phone_number =models.BigIntegerField() ,
+    client_email = models.CharField(max_length=100),
+    client_ticket =models.ForeignKey(Ticket, on_delete=models.CASCADE,related_name="client") ,
+    login_date =  models.DateTimeField(auto_now_add=True)
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE,related_name="client")
+    
+class User(AbstractUser) :
+    
+    class Role (models.TextChoices):
+        ADMIN = "ADMIN", "admin"
+        AGENT = "AGENT" ,"agent"
+    
+    phone=models.BigIntegerField()
+    born_date = models.DateTimeField()
+    service = models.ForeignKey(Service, on_delete=models.CASCADE,related_name="user")
+    photo = models.ImageField(upload_to="")
+    role= models.CharField(max_length=20, choices=Role.choices())
+    guichet  = models.ForeignKey(Guichet , on_delete=models.CASCADE , related_name="user")  
+    
     
    
