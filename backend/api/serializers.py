@@ -1,115 +1,210 @@
-
 from rest_framework import serializers
-from .models import  Product,Ticket,Client,Guichet
-from api.models import User as auth_user
-# Create your views here.
 
-class UserSerializer(serializers.ModelSerializer):
-    
-   
+from api import selectors
+from .models import Client, Guichet, Service, Ticket, User
+
+from api import services
+
+# ---------------------------------------------------------------------------
+# Service
+# ---------------------------------------------------------------------------
+
+
+class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = auth_user
-        fields = ['id', 
-                  'username', 
-                  'email', 
-                  'password',
-                  'is_superuser',
-                  "date_joined",
-                  "last_login",
-                  "is_active",
-                  "first_name",
-                  "last_name",
-                  "phone",
-                  "service"
-                  "photo",
-                  "role"
-                  "guichet"
-                  ]
-        read_only_fields = ['uid','is_superuser,guichet,role']
+        model = Service
+        fields = ["id", "service_type", "service_description", "is_active","code_service","priorite","duree_estimee"]
+
+# ---------------------------------------------------------------------------
+# Guichet
+# ---------------------------------------------------------------------------
+
+class GuichetSerializer(serializers.ModelSerializer):
+    """Utilisé en écriture (création / mise à jour) : services par id."""
+
+    services = serializers.PrimaryKeyRelatedField(
+        queryset=Service.objects.all(), many=True
+    )
+
+    class Meta:
+        model = Guichet
+        fields = [
+            "id",
+            "guichet_name",
+            "guichet_description",
+            "guichet_status",
+            "services",
+        ]
+
+
+class GuichetDetailSerializer(serializers.ModelSerializer):
+    """Utilisé en lecture : services imbriqués + file d'attente en direct."""
+
+    services = ServiceSerializer(many=True, read_only=True)
+    waiting_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Guichet
+        fields = [
+            "id",
+            "guichet_name",
+            "guichet_description",
+            "guichet_status",
+            "services",
+            "waiting_count",
+        ]
+
+    def get_waiting_count(self, obj):
+        return selectors.guichet_waiting_count(guichet=obj)
+
+# ---------------------------------------------------------------------------
+# Agent (User)
+# ---------------------------------------------------------------------------
+
+
+class AgentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "phone",
+            "born_date",
+            "role",
+            "agent_status",
+            "guichet",
+            "is_active",
+        ]
+        read_only_fields = ["is_active"]
+
+
+class AgentCreateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=8)
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "password",
+            "first_name",
+            "last_name",
+            "email",
+            "phone",
+            "born_date",
+            "role",
+            "guichet",
+        ]
 
     def create(self, validated_data):
-        
-        return auth_user.objects.create_user(**validated_data)
-    
-    def update(self, instance, validated_data):
-        instance.username = validated_data.get('username', instance.username)
-        instance.email = validated_data.get('email', instance.email)
-        password = validated_data.get('password', None)
-        if password:
-            instance.set_password(password)
-        instance.save()
-        return instance
-    
+        password = validated_data.pop("password")
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
 
-class ProductSerializer(serializers.ModelSerializer):
-    
+
+class AgentStatusUpdateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Product
-        fields = ['product_id', 'product_name', 'product_description', 'product_price', 'product_image', 'product_stock', 'user']
-        read_only_fields = ['product_id', 'user']
+        model = User
+        fields = ["agent_status"]
 
-    """   def create(self, validated_data):
-        return Product.objects.create(**validated_data)
-    """        
-    
-    def update(self, instance, validated_data):
-        instance.product_name = validated_data.get('product_name', instance.product_name)
-        instance.product_description = validated_data.get('product_description', instance.product_description)
-        instance.product_price = validated_data.get('product_price', instance.product_price)
-        instance.product_image = validated_data.get('product_image', instance.product_image)
-        instance.product_stock = validated_data.get('product_stock', instance.product_stock)
-        instance.save()
-        return instance    
-    
-class ClientSerializers(serializers.ModelSerializer):
-     class Meta :
+
+# ---------------------------------------------------------------------------
+# Client
+# ---------------------------------------------------------------------------
+
+
+class ClientSerializer(serializers.ModelSerializer):
+    # Le numéro de carte n'est jamais renvoyé en clair par l'API :
+    # write_only en entrée, version masquée en sortie.
+    numero_carte_credit = serializers.IntegerField(write_only=True, required=False)
+    carte_masquee = serializers.SerializerMethodField()
+
+    class Meta:
         model = Client
-        fieds = [
+        fields = [
             "id_client",
             "client_name",
             "client_phone_number",
             "client_email",
-            "client_ticket",
-            "login_date"
-                 ] 
-        read_only_fields =["id_client","login_date"]
-        
-        def create(self, validated_data):
-        
-            return auth_user.objects.create_user(**validated_data)
-    
-        def update(self, instance, validated_data):
-            instance.client_name = validated_data.get('client_name', instance.client_name)
-            instance.client_email = validated_data.get('client_email', instance.client_email)
-            instance.client_phone_number= validated_data.get('client_phonr_number',instance.client_phone_number)
-            instance.client_ticket = validated_data.get('client_ticket',instance.client_ticket)
-            instance.save()
-            return instance
-        
-        
-class GuichetSerializers(serializers.ModelSerializer):
-     class Meta :
-        model = Guichet
-        fieds = [
-            "id_guichet",
-            "guichet_name",
-            "guichet_description",
-            "guichet_status",
-            "user_id",
-            
-                 ] 
-        read_only_fields =["id_guichet","user__id"]
-class TicketSerializers(serializers.ModelSerializer):
-     class Meta :
+            "login_date",
+            "numero_carte_credit",
+            "carte_masquee",
+        ]
+        read_only_fields = ["login_date"]
+
+    def get_carte_masquee(self, obj):
+        if not obj.numero_carte_credit:
+            return None
+        digits = str(obj.numero_carte_credit)
+        return f"**** {digits[-4:]}" if len(digits) >= 4 else "****"
+
+# ---------------------------------------------------------------------------
+# Ticket
+# ---------------------------------------------------------------------------
+
+class TicketSerializer(serializers.ModelSerializer):
+    """Sérialiseur de lecture — entièrement read-only, imbriqué."""
+
+    service = ServiceSerializer(read_only=True)
+    guichet = GuichetSerializer(read_only=True)
+    owner = ClientSerializer(read_only=True)
+    called_by = AgentSerializer(read_only=True)
+    queue_position = serializers.SerializerMethodField()
+
+    class Meta:
         model = Ticket
-        fieds = [
-            "service",
+        fields = [
+            "id_ticket",
             "ticket_code",
-            "ticket_status","",
+            "ticket_status",
+            "service",
+            "guichet",
+            "owner",
+            "called_by",
             "created_at",
-            "closed_at",
-            "priority",
-            "guichet"
-            
-                 ] 
-        read_only_fields =["service","ticket_code","guichet"]
+            "called_at",
+            "finished_at",
+            "queue_position",
+        ]
+        read_only_fields = fields
+
+    def get_queue_position(self, obj):
+        return selectors.queue_position(ticket=obj)
+
+class TicketCreateSerializer(serializers.Serializer):
+    """
+    Utilisé par la borne libre-service (endpoint public). Le guichet
+    est choisi automatiquement par répartition de charge, sauf si
+    fourni explicitement.
+    """
+
+    service = serializers.PrimaryKeyRelatedField(
+        queryset=Service.objects.filter(is_active=True)
+    )
+    guichet = serializers.PrimaryKeyRelatedField(
+        queryset=Guichet.objects.all(), required=False
+    )
+    client_name = serializers.CharField(max_length=40)
+    client_phone_number = serializers.IntegerField()
+    client_email = serializers.EmailField()
+    numero_carte_credit = serializers.IntegerField(required=False, allow_null=True)
+
+    def create(self, validated_data):
+        guichet = validated_data.get("guichet")
+        return services.ticket_create(
+            service_id=validated_data["service"].id,
+            guichet_id=guichet.id if guichet else None,
+            client_name=validated_data["client_name"],
+            client_phone_number=validated_data["client_phone_number"],
+            client_email=validated_data["client_email"],
+            numero_carte_credit=validated_data.get("numero_carte_credit"),
+        )
+
+
+class TicketTransferSerializer(serializers.Serializer):
+    guichet = serializers.PrimaryKeyRelatedField(queryset=Guichet.objects.all())

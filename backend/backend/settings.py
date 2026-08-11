@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "corsheaders",
     'rest_framework_simplejwt',
+    
 ]
 
 from datetime import timedelta
@@ -48,7 +49,7 @@ from datetime import timedelta
 #JWT-CONFIGIURATIONS
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
 
