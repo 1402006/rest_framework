@@ -22,12 +22,12 @@ export function TicketConfirmation({ ticket, priorityReason, onNewTicket }: Prop
   const timeLabel = createdAt.toLocaleTimeString(localeTag, { hour: "2-digit", minute: "2-digit" });
 
   return (
-    <div className="flex flex-col items-center gap-6 rounded-2xl border border-[var(--color-border)]
-                     bg-[var(--color-surface-raised)] px-8 py-10 text-center">
+    <div className="flex flex-col items-center gap-6 rounded-2xl border border-border
+                     bg-surface-raised px-8 py-10 text-center">
       <div className="print-ticket flex flex-col items-center gap-6">
         <div>
           {priorityReason !== "none" && (
-            <span className="mb-2 inline-flex items-center gap-1 rounded-full bg-[var(--color-warning-soft)] px-2.5 py-0.5 text-xs font-medium text-[var(--color-warning)]">
+            <span className="mb-2 inline-flex items-center gap-1 rounded-full bg-warning-soft px-2.5 py-0.5 text-xs font-medium text-warning">
               <Star size={12} aria-hidden="true" />
               {priorityReason === "pregnancy" && t.confirmation.priorityBadgePregnancy}
               {priorityReason === "elderly" && t.confirmation.priorityBadgeElderly}
@@ -35,16 +35,16 @@ export function TicketConfirmation({ ticket, priorityReason, onNewTicket }: Prop
               {priorityReason === "other" && t.confirmation.priorityBadgeOther}
             </span>
           )}
-          <p className="text-sm text-[var(--color-text-muted)]">{t.confirmation.yourTicket}</p>
-          <p className="mt-1 text-5xl font-semibold tracking-tight text-[var(--color-text)]">
+          <p className="text-sm text-text-muted">{t.confirmation.yourTicket}</p>
+          <p className="mt-1 text-5xl font-semibold tracking-tight text-text">
             {ticket.ticket_code}
           </p>
-          <p className="mt-1 text-sm text-[var(--color-text-muted)]">
+          <p className="mt-1 text-sm text-text-muted">
             {serviceName(ticket.service.service_type, SERVICE_TYPE_LABELS[ticket.service.service_type])}
           </p>
         </div>
 
-        <div className="flex flex-col items-center gap-1 text-xs text-[var(--color-text-muted)]">
+        <div className="flex flex-col items-center gap-1 text-xs text-text-muted">
           <span className="flex items-center gap-1">
             <MapPin size={12} aria-hidden="true" />
             {t.confirmation.guichet} : {ticket.guichet.guichet_name}
@@ -55,19 +55,19 @@ export function TicketConfirmation({ ticket, priorityReason, onNewTicket }: Prop
           </span>
         </div>
 
-        <div className="rounded-xl border border-[var(--color-border)] bg-white p-4">
+        <div className="rounded-xl border border-border bg-white p-4">
           <QRCodeSVG value={trackingUrl} size={140} />
         </div>
 
-        <p className="max-w-[240px] text-sm text-[var(--color-text-muted)]">{t.confirmation.scanHint}</p>
+        <p className="max-w-60 text-sm text-text-muted">{t.confirmation.scanHint}</p>
 
         {isWaiting && (
-          <div className="rounded-xl bg-[var(--color-accent-soft)] p-3 text-center">
-            <p className="mb-1 flex items-center justify-center gap-1 text-xs text-[var(--color-accent)]">
+          <div className="rounded-xl bg-accent-soft p-3 text-center">
+            <p className="mb-1 flex items-center justify-center gap-1 text-xs text-accent">
               <Users2 size={12} aria-hidden="true" />
               {t.confirmation.peopleAhead}
             </p>
-            <p className="text-lg font-semibold text-[var(--color-accent)]">{peopleAhead}</p>
+            <p className="text-lg font-semibold text-accent">{peopleAhead}</p>
           </div>
         )}
       </div>
@@ -75,8 +75,8 @@ export function TicketConfirmation({ ticket, priorityReason, onNewTicket }: Prop
       <button
         type="button"
         onClick={() => window.print()}
-        className="no-print flex items-center gap-2 rounded-lg border border-[var(--color-border)]
-                   px-4 py-2 text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-surface)]"
+        className="no-print flex items-center gap-2 rounded-lg border border-border
+                   px-4 py-2 text-sm font-medium text-text hover:bg-surface"
       >
         <Printer size={16} aria-hidden="true" />
         {t.confirmation.print}
@@ -85,8 +85,8 @@ export function TicketConfirmation({ ticket, priorityReason, onNewTicket }: Prop
       <button
         type="button"
         onClick={onNewTicket}
-        className="no-print flex items-center gap-2 text-sm font-medium text-[var(--color-text-muted)]
-                   hover:text-[var(--color-text)]"
+        className="no-print flex items-center gap-2 text-sm font-medium text-text-muted
+                   hover:text-text"
       >
         <RotateCcw size={16} aria-hidden="true" />
         {t.confirmation.newTicket}

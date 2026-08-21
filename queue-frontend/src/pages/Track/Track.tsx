@@ -56,7 +56,7 @@ export function Track() {
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center px-6">
-        <p className="text-sm text-[var(--color-text-muted)]">Chargement de votre ticket...</p>
+        <p className="text-sm text-text-muted">Chargement de votre ticket...</p>
       </div>
     );
   }
@@ -64,7 +64,7 @@ export function Track() {
   if (notFound || !ticket) {
     return (
       <div className="flex min-h-screen items-center justify-center px-6 text-center">
-        <p className="text-sm text-[var(--color-text-muted)]">
+        <p className="text-sm text-text-muted">
           Ticket introuvable. Vérifiez le lien ou reprenez un ticket à la borne.
         </p>
       </div>
@@ -82,20 +82,20 @@ export function Track() {
 
   return (
     <div className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-6 py-10">
-      <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-6">
+      <div className="rounded-2xl border border-border bg-surface-raised p-6">
         <div className="mb-4 flex items-center justify-between">
-          <span className="text-xs text-[var(--color-text-muted)]">Votre ticket</span>
+          <span className="text-xs text-text-muted">Votre ticket</span>
           <StatusBadge status={ticket.ticket_status} />
         </div>
 
-        <p className="text-center text-4xl font-semibold tracking-tight text-[var(--color-text)]">
+        <p className="text-center text-4xl font-semibold tracking-tight text-text">
           {ticket.ticket_code}
         </p>
-        <p className="text-center text-sm text-[var(--color-text-muted)]">
+        <p className="text-center text-sm text-text-muted">
           {SERVICE_TYPE_LABELS[ticket.service.service_type]}
         </p>
 
-        <div className="mb-5 mt-2 flex flex-col items-center gap-1 text-xs text-[var(--color-text-muted)]">
+        <div className="mb-5 mt-2 flex flex-col items-center gap-1 text-xs text-text-muted">
           <span className="flex items-center gap-1">
             <MapPin size={12} aria-hidden="true" />
             {ticket.guichet.guichet_name}
@@ -109,21 +109,21 @@ export function Track() {
         {isWaiting && (
           <>
             <div className="mb-4 grid grid-cols-2 gap-3">
-              <div className="rounded-xl bg-[var(--color-surface)] p-3 text-center">
-                <p className="mb-1 flex items-center justify-center gap-1 text-xs text-[var(--color-text-muted)]">
+              <div className="rounded-xl bg-surface p-3 text-center">
+                <p className="mb-1 flex items-center justify-center gap-1 text-xs text-text-muted">
                   <Users2 size={12} aria-hidden="true" />
                   Devant vous
                 </p>
-                <p className="text-lg font-semibold text-[var(--color-text)]">
+                <p className="text-lg font-semibold text-text">
                   {Math.max(0, ticket.queue_position - 1)}
                 </p>
               </div>
-              <div className="rounded-xl bg-[var(--color-surface)] p-3 text-center">
-                <p className="mb-1 flex items-center justify-center gap-1 text-xs text-[var(--color-text-muted)]">
+              <div className="rounded-xl bg-surface p-3 text-center">
+                <p className="mb-1 flex items-center justify-center gap-1 text-xs text-text-muted">
                   <Clock size={12} aria-hidden="true" />
                   Position
                 </p>
-                <p className="text-lg font-semibold text-[var(--color-text)]">{ticket.queue_position}</p>
+                <p className="text-lg font-semibold text-text">{ticket.queue_position}</p>
               </div>
             </div>
 
@@ -131,7 +131,7 @@ export function Track() {
               <QueueProgressBar position={ticket.queue_position} />
             </div>
 
-            <div className="flex items-center gap-2 rounded-lg bg-[var(--color-warning-soft)] px-3 py-2 text-xs text-[var(--color-warning)]">
+            <div className="flex items-center gap-2 rounded-lg bg-warning-soft px-3 py-2 text-xs text-warning">
               <Bell size={14} aria-hidden="true" />
               Vous serez notifié quand votre tour approche
             </div>
@@ -139,7 +139,7 @@ export function Track() {
         )}
 
         {isActive && (
-          <p className="rounded-lg bg-[var(--color-warning-soft)] px-3 py-3 text-center text-sm font-medium text-[var(--color-warning)]">
+          <p className="rounded-lg bg-warning-soft px-3 py-3 text-center text-sm font-medium text-warning">
             C'est votre tour ! Présentez-vous au {ticket.guichet.guichet_name}.
           </p>
         )}
@@ -148,8 +148,8 @@ export function Track() {
 
         {isCompleted && feedback && (
           <div className="text-center">
-            <CheckCircle2 size={28} className="mx-auto mb-2 text-[var(--color-success)]" aria-hidden="true" />
-            <p className="mb-2 text-sm font-medium text-[var(--color-text)]">Merci pour votre avis !</p>
+            <CheckCircle2 size={28} className="mx-auto mb-2 text-success" aria-hidden="true" />
+            <p className="mb-2 text-sm font-medium text-text">Merci pour votre avis !</p>
             <div className="mb-1 flex justify-center gap-1">
               {[1, 2, 3, 4, 5].map((value) => (
                 <Star
@@ -157,21 +157,21 @@ export function Track() {
                   size={18}
                   className={
                     value <= feedback.rating
-                      ? "fill-[var(--color-warning)] text-[var(--color-warning)]"
-                      : "text-[var(--color-border)]"
+                      ? "fill-warning text-warning"
+                      : "text-border"
                   }
                   strokeWidth={1.5}
                 />
               ))}
             </div>
             {feedback.comment && (
-              <p className="mt-2 text-xs italic text-[var(--color-text-muted)]">"{feedback.comment}"</p>
+              <p className="mt-2 text-xs italic text-text-muted">"{feedback.comment}"</p>
             )}
           </div>
         )}
 
         {isClosedOther && (
-          <p className="rounded-lg bg-[var(--color-surface)] px-3 py-3 text-center text-sm text-[var(--color-text-muted)]">
+          <p className="rounded-lg bg-surface px-3 py-3 text-center text-sm text-text-muted">
             {ticket.ticket_status === "ABSENT" && "Vous avez été marqué absent lors de l'appel."}
             {ticket.ticket_status === "TRANSFERRED" && "Ce ticket a été transféré vers un autre guichet."}
             {ticket.ticket_status === "CANCELLED" && "Ce ticket a été annulé."}

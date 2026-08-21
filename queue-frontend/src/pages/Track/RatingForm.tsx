@@ -21,7 +21,7 @@ export function RatingForm({ onSubmitted }: Props) {
 
   return (
     <div>
-      <p className="mb-3 text-center text-sm font-medium text-[var(--color-text)]">
+      <p className="mb-3 text-center text-sm font-medium text-text">
         Comment s'est passée votre prise en charge ?
       </p>
       <div className="mb-3 flex justify-center gap-1">
@@ -38,8 +38,8 @@ export function RatingForm({ onSubmitted }: Props) {
               size={26}
               className={
                 value <= (hovered || rating)
-                  ? "fill-[var(--color-warning)] text-[var(--color-warning)]"
-                  : "text-[var(--color-border)]"
+                  ? "fill-warning text-warning"
+                  : "text-border"
               }
               strokeWidth={1.5}
             />
@@ -51,15 +51,15 @@ export function RatingForm({ onSubmitted }: Props) {
         onChange={(e) => setComment(e.target.value)}
         placeholder="Un commentaire (facultatif)"
         rows={2}
-        className="mb-3 w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-raised)]
-                   px-3 py-2 text-sm text-[var(--color-text)] outline-none focus:border-[var(--color-accent)]"
+        className="mb-3 w-full rounded-lg border border-border bg-surface-raised
+                   px-3 py-2 text-sm text-text outline-none focus:border-accent"
       />
       <button
         type="button"
         onClick={handleSubmit}
         disabled={rating === 0}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--color-accent)]
-                   px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[var(--color-accent-hover)]
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent
+                   px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-hover
                    disabled:pointer-events-none disabled:opacity-50"
       >
         <Send size={14} aria-hidden="true" />

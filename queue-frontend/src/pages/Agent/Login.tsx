@@ -30,32 +30,32 @@ export function Login({ onLoggedIn }: Props) {
     <div className="flex min-h-screen items-center justify-center px-6">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-8"
+        className="w-full max-w-sm rounded-2xl border border-border bg-surface-raised p-8"
       >
         <div className="mb-6 flex flex-col items-center gap-3 text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-accent-soft)]">
-            <Headset size={24} className="text-[var(--color-accent)]" aria-hidden="true" />
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-soft">
+            <Headset size={24} className="text-accent" aria-hidden="true" />
           </div>
-          <p className="text-lg font-medium text-[var(--color-text)]">Connexion agent</p>
+          <p className="text-lg font-medium text-text">Connexion agent</p>
         </div>
 
         <div className="mb-4 flex flex-col gap-1.5">
-          <label htmlFor="username" className="text-sm font-medium text-[var(--color-text)]">
+          <label htmlFor="username" className="text-sm font-medium text-text">
             Identifiant
           </label>
           <input
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2.5 text-sm
-                       outline-none focus:border-[var(--color-accent)]"
+            className="rounded-lg border border-border bg-surface px-3 py-2.5 text-sm
+                       outline-none focus:border-accent"
             autoComplete="username"
             required
           />
         </div>
 
         <div className="mb-5 flex flex-col gap-1.5">
-          <label htmlFor="password" className="text-sm font-medium text-[var(--color-text)]">
+          <label htmlFor="password" className="text-sm font-medium text-text">
             Mot de passe
           </label>
           <input
@@ -63,8 +63,8 @@ export function Login({ onLoggedIn }: Props) {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2.5 text-sm
-                       outline-none focus:border-[var(--color-accent)]"
+            className="rounded-lg border border-border bg-surface px-3 py-2.5 text-sm
+                       outline-none focus:border-accent"
             autoComplete="current-password"
             required
           />
@@ -79,8 +79,8 @@ export function Login({ onLoggedIn }: Props) {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--color-accent)]
-                     px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--color-accent-hover)]
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent
+                     px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-hover
                      disabled:pointer-events-none disabled:opacity-60"
         >
           <LogIn size={16} aria-hidden="true" />

@@ -12,10 +12,10 @@ import {
 function Row({ icon: Icon, label, value }: { icon: typeof Banknote; label: string; value: string }) {
   return (
     <div className="flex items-start gap-2.5">
-      <Icon size={16} className="mt-0.5 text-[var(--color-accent)]" aria-hidden="true" />
+      <Icon size={16} className="mt-0.5 text-accent" aria-hidden="true" />
       <div>
-        <p className="text-xs text-[var(--color-text-muted)]">{label}</p>
-        <p className="text-sm text-[var(--color-text)]">{value}</p>
+        <p className="text-xs text-text-muted">{label}</p>
+        <p className="text-sm text-text">{value}</p>
       </div>
     </div>
   );

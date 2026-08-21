@@ -91,12 +91,12 @@ function KioskContent() {
       <LanguageToggle />
 
       <div className="mb-8 flex flex-col items-center gap-3 text-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-accent-soft)]">
-          <Building2 size={24} className="text-[var(--color-accent)]" aria-hidden="true" />
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-soft">
+          <Building2 size={24} className="text-accent" aria-hidden="true" />
         </div>
         <div>
-          <p className="text-lg font-medium text-[var(--color-text)]">{t.kiosk.welcome}</p>
-          <p className="text-sm text-[var(--color-text-muted)]">{headerSubtitle}</p>
+          <p className="text-lg font-medium text-text">{t.kiosk.welcome}</p>
+          <p className="text-sm text-text-muted">{headerSubtitle}</p>
         </div>
       </div>
 

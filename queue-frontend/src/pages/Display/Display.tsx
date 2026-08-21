@@ -9,8 +9,8 @@ import { MonitorOff } from "lucide-react";
 export function Display() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-3 px-6 text-center">
-      <MonitorOff size={32} className="text-[var(--color-text-muted)]" aria-hidden="true" />
-      <p className="text-sm text-[var(--color-text-muted)]">
+      <MonitorOff size={32} className="text-text-muted" aria-hidden="true" />
+      <p className="text-sm text-text-muted">
         Écran d'affichage temporairement indisponible — en attente d'un accès public côté API.
       </p>
     </div>

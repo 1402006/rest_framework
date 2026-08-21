@@ -77,24 +77,24 @@ export function ClientInfoForm({ service, onBack, onSubmit, isSubmitting }: Prop
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-6 sm:p-8"
+      className="w-full rounded-2xl border border-border bg-surface-raised p-6 sm:p-8"
     >
       <button
         type="button"
         onClick={onBack}
-        className="mb-4 flex items-center gap-1.5 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+        className="mb-4 flex items-center gap-1.5 text-sm text-text-muted hover:text-text"
       >
         <ArrowLeft size={16} aria-hidden="true" />
         {t.form.changeService}
       </button>
 
-      <p className="mb-1 text-sm text-[var(--color-text-muted)]">{t.form.selectedService}</p>
-      <p className="mb-6 text-base font-medium text-[var(--color-text)]">
+      <p className="mb-1 text-sm text-text-muted">{t.form.selectedService}</p>
+      <p className="mb-6 text-base font-medium text-text">
         {serviceName(service.service_type, SERVICE_TYPE_LABELS[service.service_type])}
       </p>
 
       <div className="mb-6">
-        <p className="mb-3 text-sm font-semibold text-[var(--color-text)]">{t.form.personalInfoTitle}</p>
+        <p className="mb-3 text-sm font-semibold text-text">{t.form.personalInfoTitle}</p>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <TextField
             label={t.form.fullName}
@@ -131,7 +131,7 @@ export function ClientInfoForm({ service, onBack, onSubmit, isSubmitting }: Prop
       </div>
 
       <div className="mb-6">
-        <p className="mb-3 text-sm font-semibold text-[var(--color-text)]">{t.form.additionalInfoTitle}</p>
+        <p className="mb-3 text-sm font-semibold text-text">{t.form.additionalInfoTitle}</p>
         <TextField
           label={t.form.noteLabel}
           value={form.note}
@@ -140,7 +140,7 @@ export function ClientInfoForm({ service, onBack, onSubmit, isSubmitting }: Prop
       </div>
 
       <div className="mb-6">
-        <p className="mb-3 text-sm font-semibold text-[var(--color-text)]">{t.form.priorityTitle}</p>
+        <p className="mb-3 text-sm font-semibold text-text">{t.form.priorityTitle}</p>
         <SelectField
           label={t.form.priorityReasonLabel}
           value={form.priorityReason}
@@ -152,14 +152,14 @@ export function ClientInfoForm({ service, onBack, onSubmit, isSubmitting }: Prop
           <option value="disability">{t.form.priorityDisability}</option>
           <option value="other">{t.form.priorityOther}</option>
         </SelectField>
-        <p className="mt-1.5 text-xs text-[var(--color-text-muted)]">{t.form.priorityReasonHelp}</p>
+        <p className="mt-1.5 text-xs text-text-muted">{t.form.priorityReasonHelp}</p>
       </div>
 
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full rounded-lg bg-[var(--color-accent)] px-4 py-3 text-sm font-medium text-white
-                   transition-colors hover:bg-[var(--color-accent-hover)]
+        className="w-full rounded-lg bg-accent px-4 py-3 text-sm font-medium text-white
+                   transition-colors hover:bg-accent-hover
                    disabled:pointer-events-none disabled:opacity-60"
       >
         {isSubmitting ? t.form.submitting : t.form.submit}
