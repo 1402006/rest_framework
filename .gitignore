@@ -1,0 +1,48 @@
+# --- Frontend (Vite / React / TypeScript) ---
+node_modules/
+dist/
+dist-ssr/
+*.local
+.vite/
+
+# Logs npm/yarn/pnpm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Éditeurs
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# --- Backend (Django) ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.sqlite3
+db.sqlite3
+
+# Environnement virtuel
+venv/
+env/
+.venv/
+
+# Variables d'environnement / secrets
+.env
+.env.local
+*.env
+
+# Fichiers de migration générés localement si tu veux les exclure
+# (à décommenter seulement si tu ne veux PAS versionner les migrations)
+# */migrations/*.py
+# !*/migrations/__init__.py
+
+# --- Système ---
+.DS_Store
+Thumbs.db

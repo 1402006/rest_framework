@@ -1,0 +1,302 @@
+### ============================================================
+### Fichier de tests manuels — Système de gestion de file d'attente bancaire
+### Compatible avec l'extension "REST Client" (VS Code) ou le
+### HTTP Client de JetBrains (IntelliJ/PyCharm).
+###
+### Hypothèse : authentification par Token DRF
+### (rest_framework.authtoken, endpoint /api/auth/login/ à ajouter
+
+### dans les urls du projet : path("auth/login/", obtain_auth_token))
+
+### ============================================================
+
+@baseUrl = http://127.0.0.1:8000/api
+@adminToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg2MTA3ODk1LCJpYXQiOjE3ODYwMjE0OTUsImp0aSI6IjlmMTA3OTQ4NmJiZDQzZjQ4YTY2NWRmMGY2OTk2YWNmIiwidXNlcl9pZCI6IjEifQ.mt-izBd5qDOYMLKDzpu6ABexNQsNfwaRhcxGEeK5504
+@agentToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg1ODQ5NTc3LCJpYXQiOjE3ODU3NjMxNzcsImp0aSI6IjA1OGI2MGY5ZjliYTQ5OGNhYTNhMjU4ZDlhYjkyZDc4IiwidXNlcl9pZCI6IjIifQ.FVrd4f1hojDut_BvVI_h6ZdzXHpc5OO4_M6m44q5BOc
+
+
+### ----------------------------------------------------------------
+### 1. AUTHENTIFICATION
+### ----------------------------------------------------------------
+
+### 1.1 Login admin — copier le "token" reçu dans @adminToken
+POST {{baseUrl}}/auth/login/
+Content-Type: application/json
+
+{
+  "username": "freddy",
+  "password": "12345"
+}
+
+### 1.2 Login agent — copier le "token" reçu dans @agentToken
+POST {{baseUrl}}/auth/login/
+Content-Type: application/json
+
+{
+  "username": "agent_test",
+  "password": "MotDePasseAgent123"
+}
+
+
+### ----------------------------------------------------------------
+### 2. SERVICES
+### ----------------------------------------------------------------
+
+### 2.1 Créer un service (admin)
+POST {{baseUrl}}/services/
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "service_type": "DEPOT",
+  "service_description": "Dépôt d'espèces ou de chèques",
+  "is_active": true
+}
+
+### 2.2 Créer un second service (admin)
+POST {{baseUrl}}/services/
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "service_type": "RETRAIT",
+  "service_description": "Retrait d'espèces",
+  "is_active": true
+}
+
+### 2.3 Lister tous les services
+GET {{baseUrl}}/services/
+Authorization: Bearer {{adminToken}}
+### afficher l'utilisateur connecté
+GET {{baseUrl}}/token/user/me/
+Authorization: Bearer {{adminToken}}
+
+### 2.4 Lister uniquement les services actifs
+GET {{baseUrl}}/services/?is_active=true
+Authorization: Bearer {{adminToken}}
+
+### 2.5 Détail d'un service
+GET {{baseUrl}}/services/1/
+Authorization: Bearer  {{adminToken}}
+
+### 2.6 Modifier un service (admin)
+PATCH {{baseUrl}}/services/1/
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "service_description": "Dépôt d'espèces, chèques et virements",
+  "duree_estimee":"10:10:10",
+  "priorite":"NORMALE"}
+
+### 2.7 Modifier un service en tant qu'agent -> doit échouer (403)
+PATCH {{baseUrl}}/services/1/
+Authorization: Bearer {{agentToken}}
+Content-Type: application/json
+
+{
+  "service_description": "Tentative non autorisée"
+}
+
+
+### ----------------------------------------------------------------
+### 3. GUICHETS
+### ----------------------------------------------------------------
+
+### 3.1 Créer un guichet proposant les services 1 et 2 (admin)
+POST {{baseUrl}}/guichets/
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "guichet_name": "Guichet 2",
+  "guichet_description": "Guichet secondaire, rez-de-chaussée",
+  "guichet_status": "REPAIRING",
+  "services": [1]
+}
+
+### 3.2 Lister les guichets
+GET {{baseUrl}}/guichets/
+Authorization: Bearer {{adminToken}}
+
+### 3.3 Filtrer les guichets ouverts proposant le service 1
+GET {{baseUrl}}/guichets/?status=OPEN&service=1
+Authorization: Bearer {{adminToken}}
+
+### 3.4 Détail d'un guichet (avec file d'attente en direct)
+GET {{baseUrl}}/guichets/1/
+Authorization: Bearer {{adminToken}}
+
+### 3.5 Fermer un guichet (admin ou agent)
+POST {{baseUrl}}/guichets/1/close/
+Authorization: Bearer {{adminToken}}
+
+### 3.6 Rouvrir un guichet
+POST {{baseUrl}}/guichets/1/open/
+Authorization: Bearer {{adminToken}}
+
+
+### ----------------------------------------------------------------
+### 4. AGENTS
+### ----------------------------------------------------------------
+
+### 4.1 Créer un agent rattaché au guichet 1 (admin)
+POST {{baseUrl}}/agents/
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "username": "agent_test",
+  "password": "MotDePasseAgent123",
+  "first_name": "Awa",
+  "last_name": "Ngono",
+  "email": "awa.ngono@banque.test",
+  "phone": 690123456,
+  "role": "AGENT",
+  "guichet": 1
+}
+
+### 4.2 Lister les agents (admin)
+GET {{baseUrl}}/agents/
+Authorization: Bearer {{adminToken}}
+
+### 4.3 Lister les agents d'un guichet précis
+GET {{baseUrl}}/agents/?guichet=1
+Authorization: Bearer {{adminToken}}
+
+### afficher l'user connecte 
+
+GET {{baseUrl}}/token/user/me/
+Authorization: Bearer {{adminToken}}
+
+### 4.4 Détail d'un agent
+GET {{baseUrl}}/agents/2/
+Authorization: Bearer {{adminToken}}
+
+### 4.5 L'agent met à jour SON propre statut
+PATCH {{baseUrl}}/agents/me/status/
+Authorization: Bearer {{agentToken}}
+Content-Type: application/json
+
+{
+  "agent_status": "AVAILABLE"
+}
+
+### 4.6 Un agent tente de lister tous les agents -> doit échouer (403)
+GET {{baseUrl}}/agents/
+Authorization: Bearer {{agentToken}}
+
+
+### ----------------------------------------------------------------
+### 5. TICKETS — Parcours client (borne libre-service, PUBLIC)
+### ----------------------------------------------------------------
+
+### 5.1 Un client retire un ticket (guichet choisi automatiquement)
+# @name creerTicket
+POST {{baseUrl}}/tickets/create/
+Content-Type: application/json
+
+{
+  "service": 1,
+  "client_name": "Jean Mballa",
+  "client_phone_number": 677889900,
+  "client_email": "jean.mballa@example.com",
+  "numero_carte_credit": 4539123456781234
+}
+
+### 5.2 Suivre son ticket par son code (public, sans authentification)
+# Remplacer TICKET_CODE par le code reçu à l'étape 5.1
+GET {{baseUrl}}/tickets/status/TICKET_CODE/
+
+### 5.3 Retirer un ticket en imposant un guichet précis
+POST {{baseUrl}}/tickets/create/
+Content-Type: application/json
+
+{
+  "service": 1,
+  "guichet": 1,
+  "client_name": "Aïcha Fotso",
+  "client_phone_number": 655223344,
+  "client_email": "aicha.fotso@example.com"
+}
+
+### 5.4 Retirer un ticket pour un service inexistant -> doit échouer (400)
+POST {{baseUrl}}/tickets/create/
+Content-Type: application/json
+
+{
+  "service": 2,
+  "client_name": "Test Erreur",
+  "client_phone_number": 600000000,
+  "client_email": "erreur@example.com"
+}
+
+
+### ----------------------------------------------------------------
+### 6. TICKETS — Parcours agent
+### ----------------------------------------------------------------
+
+### 6.1 Lister les tickets en attente
+GET {{baseUrl}}/tickets/?status=WAITING
+Authorization: Bearer {{agentToken}}
+
+### 6.2 Lister tous les tickets du guichet 1
+GET {{baseUrl}}/tickets/?guichet=1
+Authorization: Bearer {{agentToken}}
+
+### 6.3 L'agent appelle le prochain ticket de son guichet
+POST {{baseUrl}}/tickets/call-next/
+Authorization: Bearer {{agentToken}}
+
+### 6.4 Appeler alors qu'un ticket est déjà en cours -> doit échouer (400)
+POST {{baseUrl}}/tickets/call-next/
+Authorization: Bearer {{agentToken}}
+
+### 6.5 Détail d'un ticket
+GET {{baseUrl}}/tickets/1/
+Authorization: Bearer  {{agentToken}}
+
+### 6.6 Démarrer le traitement du ticket appelé
+POST {{baseUrl}}/tickets/1/start/
+Authorization: Bearer {{agentToken}}
+
+### 6.7 Terminer le ticket
+POST {{baseUrl}}/tickets/1/complete/
+Authorization: Bearer {{agentToken}}
+
+### 6.8 Marquer un ticket appelé comme absent
+POST {{baseUrl}}/tickets/2/absent/
+Authorization: Bearer {{agentToken}}
+
+### 6.9 Annuler un ticket en attente
+POST {{baseUrl}}/tickets/3/cancel/
+Authorization: Bearer {{agentToken}}
+
+### 6.10 Transférer un ticket vers le guichet 2
+POST {{baseUrl}}/tickets/4/transfer/
+Authorization: Bearer {{agentToken}}
+Content-Type: application/json
+
+{
+  "guichet": 2
+}
+
+### 6.11 Un agent tente d'agir sur un ticket d'un AUTRE guichet -> doit échouer (403)
+POST {{baseUrl}}/tickets/99/start/
+Authorization: Bearer {{agentToken}}
+
+
+### ----------------------------------------------------------------
+### 7. CLIENTS
+### ----------------------------------------------------------------
+
+### 7.1 Lister les clients (personnel uniquement)
+GET {{baseUrl}}/clients/
+Authorization: Bearer {{adminToken}}
+
+### 7.2 Détail d'un client — vérifier que le n° de carte est masqué
+GET {{baseUrl}}/clients/1/
+Authorization: Bearer {{adminToken}}
+
+### 7.3 Accès public à la liste des clients -> doit échouer (401/403)
+GET {{baseUrl}}/clients/

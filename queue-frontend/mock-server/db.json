@@ -1,0 +1,23 @@
+{
+  "agencies": [
+    { "id": "douala-centre", "name": "Agence Centre-ville", "city": "Douala", "ticketSeq": 12 },
+    { "id": "yaounde-bastos", "name": "Agence Bastos", "city": "Yaoundé", "ticketSeq": 12 }
+  ],
+  "services": [
+    { "id": "depot", "name": "Dépôt / retrait", "icon": "Banknote" },
+    { "id": "compte", "name": "Ouverture de compte", "icon": "FileText" },
+    { "id": "carte", "name": "Carte bancaire", "icon": "CreditCard" },
+    { "id": "conseil", "name": "Conseil / prêt", "icon": "Users" }
+  ],
+  "counters": [
+    { "id": "c1", "label": "Guichet 1", "agencyId": "douala-centre", "serviceId": "depot", "currentTicketNumber": null },
+    { "id": "c2", "label": "Guichet 2", "agencyId": "douala-centre", "serviceId": "compte", "currentTicketNumber": null },
+    { "id": "c3", "label": "Guichet 3", "agencyId": "douala-centre", "serviceId": "carte", "currentTicketNumber": null },
+    { "id": "c4", "label": "Guichet 4", "agencyId": "douala-centre", "serviceId": "conseil", "currentTicketNumber": null },
+    { "id": "c5", "label": "Guichet 1", "agencyId": "yaounde-bastos", "serviceId": "depot", "currentTicketNumber": null },
+    { "id": "c6", "label": "Guichet 2", "agencyId": "yaounde-bastos", "serviceId": "compte", "currentTicketNumber": null },
+    { "id": "c7", "label": "Guichet 3", "agencyId": "yaounde-bastos", "serviceId": "carte", "currentTicketNumber": null },
+    { "id": "c8", "label": "Guichet 4", "agencyId": "yaounde-bastos", "serviceId": "conseil", "currentTicketNumber": null }
+  ],
+  "tickets": []
+}
