@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Building2 } from "lucide-react";
+import { Logo } from "../../components/Logo";
 import { getServices, createTicket, subscribeToTicketByCode } from "../../api/client";
 import { LanguageProvider, useLanguage } from "../../i18n/LanguageContext";
 import { ServiceButton } from "./ServiceButton";
@@ -92,7 +92,7 @@ function KioskContent() {
 
       <div className="mb-8 flex flex-col items-center gap-3 text-center">
         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-soft">
-          <Building2 size={24} className="text-accent" aria-hidden="true" />
+          <Logo size={60} className="text-accent" />
         </div>
         <div>
           <p className="text-lg font-medium text-text">{t.kiosk.welcome}</p>

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Headset, LogOut, MapPin } from "lucide-react";
+import { LogOut, MapPin } from "lucide-react";
 import { isLoggedIn, logout } from "../../api/auth";
 import {
   authFetchTickets,
@@ -13,6 +13,7 @@ import {
   updateMyStatus,
 } from "../../api/client";
 import { Login } from "./Login";
+import { Logo } from "../../components/Logo";
 import { WaitingList } from "./WaitingList";
 import { ActiveClientCard } from "./ActiveClientCard";
 import type { ApiAgent, ApiGuichetDetail, ApiTicket } from "../../types/api";
@@ -116,7 +117,7 @@ export function Agent() {
       <div className="mb-8 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-soft">
-            <Headset size={22} className="text-accent" aria-hidden="true" />
+            <Logo size={22} className="text-accent" />
           </div>
           <div>
             <p className="text-lg font-medium text-text">

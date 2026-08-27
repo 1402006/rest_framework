@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
-import { Headset, LogIn } from "lucide-react";
+import { LogIn } from "lucide-react";
 import { login } from "../../api/auth";
+import { Logo } from "../../components/Logo";
 
 interface Props {
   onLoggedIn: () => void;
@@ -34,7 +35,7 @@ export function Login({ onLoggedIn }: Props) {
       >
         <div className="mb-6 flex flex-col items-center gap-3 text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-soft">
-            <Headset size={24} className="text-accent" aria-hidden="true" />
+            <Logo size={60} className="text-accent" />
           </div>
           <p className="text-lg font-medium text-text">Connexion agent</p>
         </div>
